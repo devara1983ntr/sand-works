@@ -1,43 +1,28 @@
-# IMPLEMENTATION RULES (execution-layer, binding)
+# SAND WORKS — Implementation Rules (control plane)
 
-Complement `03-ENGINEERING/AGENT.md` (§14 Zero-Placeholder/§14.29) and the authoritative spec. These are the operational execution rules for the control system.
+Status: **RECONCILED to `docs/03-ENGINEERING/AGENT.md` §14 + `docs/10-SANDWORKS`.** Supersedes retired S-V1 rules. Planning-only plane; rules bind execution.
 
-## R1 — No coding until READY
-No application code is written until the authoritative gate reports `IMPLEMENTATION STATUS: READY`. Until then: DOCUMENT → VERIFY → BLOCK IF NECESSARY. Do NOT GUESS → CODE → DOCUMENT LATER.
+## Authority order (repeated from README, non-negotiable)
+1. Owner decisions → `10-SANDWORKS/DIRECTIVE-REGISTER.md`, `PRODUCT-FREEZE.md`
+2. SAND WORKS spec → `10-SANDWORKS/*`
+3. Binding rules → `03-ENGINEERING/AGENT.md` §14 (immutable)
+4. Reference continuity → `08-NATIVE-ANDROID/` (non-conflicting)
+5. Flutter `lib/` → behavioural reference only
+6. Agent inference → never
 
-## R2 — Source-of-truth hierarchy & authority
-Follow README hierarchy + authority rule. Never resolve a contradiction by guessing — record a blocker/decision (DECISION-REGISTER.md).
-
-## R3 — No fabrication, ever (AGENT §14)
-No placeholders, fake data, fake backend, fake auth, fake success, dead UI, fabricated assets/copy, silent feature drop, architectural substitution, disabled quality gates. When a blocker is real, report it; do not disguise a blocked dependency as a task.
-
-## R4 — Task discipline
-- Execute only unblocked tasks whose prerequisites are COMPLETE (DEPENDENCY-MATRIX).
-- One task at a time via the TASK-MANAGEMENT small-step model.
-- Do not jump randomly between unrelated phases.
-- Do not start a phase until its gate's prerequisites are met.
-- Do not expand scope; DEFERRED/OUT-OF-SCOPE items are never built without explicit approval (CHANGE-CONTROL).
-
-## R5 — Task contract completeness
-A task is executable only when its contract (template) is filled. Any missing/ambiguous field on a critical path → treat as BLOCKED — DESIGN SPECIFICATION and report; never infer.
-
-## R6 — Truthful states
-Loading/Empty/Error/Offline/Submitting/Success/Conflict/Forbidden/Session-expiry must be real per FINAL-UI-STATE-CONTRACT + FINAL-ERROR-CONTRACT. No fake success; no fake loading; no fake synced.
-
-## R7 — Security is not UI
-Authorization enforced in Rules + Cloud Functions. UI hiding is not authorization. Never trust client role/status/security fields (SERVER-AUTHORITY-MATRIX).
-
-## R8 — Completion & evidence
-A task is COMPLETE only with evidence (tests/logs/diff/emulator output) recorded in COMPLETION-REGISTER. DoD per template + AGENT §14.22. A phase is COMPLETE only when its gate passes.
-
-## R9 — Traceability
-Every change keeps TRACEABILITY-MATRIX current; every implemented feature maps to an authoritative requirement; every task maps back; no orphan requirements/tasks.
-
-## R10 — Change control
-Frozen scope is controlled (CHANGE-CONTROL.md). New requirements go through impact/traceability/dependency/security/test/task/approval flow. Never silently alter frozen requirements.
-
-## R11 — Progress honesty
-PROGRESS-TRACKER counts are computed from actual task state; never claim completion of the critical path that is unfinished. No "90% done" while the critical path is open.
-
-## R12 — Policy immutability
-These rules + AGENT §14 are immutable during implementation. Changes require explicit user approval and the full quality re-audit (AGENT §14.29).
+## Hard rules
+1. **No fabrication** of Firebase project, FCM, Storage, Cloud Functions, signing, or any infra (AGENT §14.4/14.5). Author & emulator-verify now; **never claim live/real-cloud DONE** without creds. Emulator-first: no SW task is blocked at authoring (see PROGRESS-TRACKER); real-cloud/release DONE waits on SW-BLK-1..6/A1/A2 per the two-tier matrix.
+2. **No fake success / silent failure** offline; expose pending, sync, conflict truthfully (AGENT §14.6).
+3. **Roles OWNER/DRIVER/LABOURER** (no ADMIN). Labourer operationally **read-only**. Remove all retired single-owner assumptions.
+4. **Server-authoritative** for privileged/money/numbering/approval/audit/expiry; client never self-awards.
+5. **Idempotency** everywhere money/closure writes; exactly-once per (org,date) for closure. Integer paise; no floating point money.
+6. **Accrued-totals wording only** — never "payment/paid"; leadership, export, notifications all respect this.
+7. **Immutable brand assets** — locked PNGs only, no SVG/regeneration/redraw; canonical set per SW-BLK-A1/A2 (do not guess).
+8. **Package `com.roshan.sandworks`; START FRESH** (no legacy migration). No public Play release.
+9. **Approval before access** for driver/labourer; temp-assignment expiry backend-enforced.
+10. **Privacy & permissions**: no broad notification request; no full-volume/DND-bypass claims; no PII analytics.
+11. **No private-financial cross-broadcast** of notifications between users.
+12. **Blocker governance**: business/design/asset blockers only owner-cleared; never disguised as tasks; spec vs go-live kept separate.
+13. **Gates gate progress** (PHASE-GATES.md); a phase/area cannot pass on an un-cleared blocker.
+14. **Traceability** — every task maps to a real requirement; every requirement to tasks/screens/gates (TRACEABILITY-MATRIX). No orphan tasks/features.
+15. Secrecy — no keys/creds committed; signing in env/ignored.

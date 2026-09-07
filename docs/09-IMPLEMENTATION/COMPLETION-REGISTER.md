@@ -1,17 +1,19 @@
-# COMPLETION REGISTER
+# SAND WORKS — Completion Register
 
-Evidence-based, permanent record. A task is added here ONLY when it is COMPLETE per its DoD and its phase gate passes. No entry without evidence. Currently empty because the programme is BLOCKED at Gate-0 (no implementation has started).
+Status: **RECONCILED to `docs/10-SANDWORKS/`.** Planning-only control plane. Retired S-V1 completions are void (they described a superseded single-owner plan, not SAND WORKS).
 
-## Recorded completions
-| Task ID | Phase | Completion date | Implemented files | Tests | Validation evidence | Reviewer result | Known limitations | Related requirements |
-|---|---|---|---|---|---|---|---|---|
-| (none) | | | | | | | | |
+Completion is recorded only when: (a) the task's `Status=DONE` in its contract file, (b) exit gate passed in `PHASE-GATES.md`, (c) evidence referenced. **No SW-xxx task is DONE — R-1 is documentation/control-plane only and produced no application deliverable.**
 
-## Rules
-- Completing a task requires: DoD per `tasks/TASK-CONTRACT-TEMPLATE.md` + AGENT §14.22; evidence (test outputs, build/analyze logs, emulator runs, diff review); a gate check.
-- A "compiles/render exists" state is NOT completion.
-- If completion required violating AGENT §14 (fabrication, placeholders, fake success, disabled gates, silent omission), the task is FAILED and must not be logged as complete.
-- Any known limitation on a completed task must be recorded truthfully and, if it affects the Definition of Done, the task must instead be BLOCKED.
+## Documentation control-plane completions (R-1, non-application)
+| Item | Evidence | Status |
+|---|---|---|
+| Gate-0 spec frozen | `10-SANDWORKS/` (24 docs) + READINESS-AUDIT | DONE |
+| 09 superseded banner + SW-xxx inventory (52) | `09-IMPLEMENTATION/README.md` | DONE |
+| Phase-1..9 task contracts (52 tasks) | `tasks/PHASE-1..9-*.tasks.md` | DONE (authored) |
+| 09 meta-docs reconciled | roadmap/master-plan/gates/dependency/trace/risk/decision/change/progress/audit/rules/task-mgmt | DONE (authored) |
 
-## Programme completion (final)
-To be written at IMPL-805 close-out after the IMPLEMENTATION CONTROL final audit (orphans 0, all gates green, release ready). Not yet applicable.
+## Application task completions (future)
+Populate as tasks flip to DONE. Template:
+| SW-id | Title | Gate | Evidence (tests/build) | Date | Verifier |
+|---|---|---|---|---|---|
+| — | — | — | — | — | — |

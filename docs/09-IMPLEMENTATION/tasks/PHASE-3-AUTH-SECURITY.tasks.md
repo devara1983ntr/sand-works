@@ -1,67 +1,41 @@
-# Phase 3 — Auth & Security Foundation — Task Contracts
+# Phase 3 — Auth, Approvals, RBAC, Rules, Cloud Functions, Audit — Task Contracts
 
-Phase objective: real Firebase auth, App Check, Firestore/Storage Security Rules, Cloud Functions (B-01..B-14), audit, org scoping, RBAC display. This phase CANNOT be executed in a sandbox without a real Firebase project, credentials, and signing keys → most tasks are **BLOCKED — CREDENTIAL/ENVIRONMENT** as well as gated by READY. Do NOT fake any of this (AGENT §14.4/14.5).
+Phase objective: real Firebase auth + owner provisioning + driver/labourer registration & approval + backend-authoritative RBAC/org scoping + Firestore/Storage Rules + Cloud Functions (B-01..B-18) + audit + temp-assignment expiry. **Requires real Firebase env (SW-BLK-1) and Blaze for CF/Storage (SW-BLK-2).** Do NOT fake any of it (AGENT §14.4/14.5).
+Shared refs: `10-SANDWORKS/SECURITY-RBAC.md`, `BACKEND-OPERATIONS.md`, `DIRECTIVE-REGISTER.md`, `DATA-MODEL.md`, `NOTIFICATION-ALERT-SPEC.md`, `CONCURRENCY-IDEMPOTENCY-AUDIT.md`.
 
-Shared refs: `FINAL-FIREBASE-SECURITY-MODEL.md`, `FINAL-BACKEND-CONTRACT.md`, `FINAL-RBAC-MATRIX.md`, `SECURITY-ATTACK-REVIEW.md`, `SERVER-AUTHORITY-MATRIX.md`, `AUDIT-LOG-INTEGRITY.md`, `FIREBASE-COVERAGE-MATRIX.md`, AGENT §14.
+### SW-301 Firebase project bootstrap + App Check
+Status: NOT-STARTED (implementable: scaffold config + emulator wiring now). DONE/real-cloud verify requires **SW-BLK-1** (real project) + SW-BLK-2 (Play Integrity App Check/cloud). No fake App Check. Priority P0. Type: backend.
+Objective: wire approved Firebase services (Auth/Firestore/Storage/Functions/FCM/App Check/Crashlytics; only per `10-SANDWORKS` + `08-NATIVE-ANDROID/FIREBASE-COVERAGE-MATRIX.md`). App Check (Play Integrity) on. No hardcoded keys.
+Tests: later rules/App Check. Downstream: SW-302..309.
 
----
+### SW-302 Auth integration + session handling (real)
+Title: Email/password auth, sign-out/reset, session, session-expiry (preserve outbox/drafts), disabled/suspended handling. No fake auth/role.
+Source: `FEATURE-CATALOG.md` SWF-01; `SCREEN-STATE-CONTRACT.md`. Security: server status each op; never trust client role. Tests: FT-AUTH. Downstream: SW-303..305, phase 5-7 auth screens.
 
-### IMPL-301 Firebase project bootstrap + App Check
-Title: Connect real Firebase project; enable Auth/Firestore/Storage/Functions/FCM/App Check/Crashlytics
-Status: BLOCKED — CREDENTIAL/ENVIRONMENT (no real project/keys; google-services.json absent).
-Priority P0. Type: backend.
-Objective: Authenticated wiring to the approved Firebase services (FIREBASE-COVERAGE-MATRIX: no services beyond approved set).
-Source: `FIREBASE-COVERAGE-MATRIX.md`, `FINAL-FIREBASE-SECURITY-MODEL.md`.
-Security: App Check (Play Integrity) enforced; no hardcoded keys. Tests: build; later rules.
-Acceptance: app talks to real project under App Check.
-Blockers: credentials/env. Out-of-scope: ML/unsupported services. Downstream: IMPL-302+.
+### SW-303 Owner provisioning (CF B-01)
+Title: provision org + owner user (role OWNER, active) + role claim; never self-role-choice.
+Source: `BACKEND-OPERATIONS.md` B-01; `SECURITY-RBAC.md`. Security: allowlist/secret; rate-limited; owner identity is a parameter. Tests: CF emulator. Downstream: phase-5 owner first-run.
 
-### IMPL-302 Auth integration + session handling
-Title: Email/password auth, session, session-expiry, disabled handling (real — no fake auth)
-Status: READY (execution BLOCKED by env/READY). Priority P0. Type: backend/security.
-Objective: Real Firebase Auth sign-in/out/reset; session persistence; N-08 session-expiry preserving drafts/outbox; disabled/suspended handling (server status check each op).
-Source: `FINAL-FEATURE-CATALOG.md` FV-1..4; `FINAL-CONDITIONAL-LOGIC.md` C-A*; `FINAL-NAVIGATION.md`.
-Security: never hardcode owner; never trust client role; UI hides only, rules enforce.
-Tests: FT-AUTH. Acceptance: no fake authenticated session possible.
-Downstream: IMPL-303, Phase 4 auth screens.
+### SW-304 Driver/labourer registration + approval (B-02/B-03)
+Title: register driver/labourer (approval=pending), OWNER approve/reject before privileged access. Server-authoritative.
+Source: `FEATURE-CATALOG.md` SWF-02; `ROLE-AND-USER-MODEL.md`; `BACKEND-OPERATIONS.md` B-02/03. Security: no approved-access until approved; approval never client-writable. Tests: approval flow (FT). Downstream: phase-5 approvals UI.
 
-### IMPL-303 Provisioning (Cloud Function B-01)
-Title: Owner provisioning CF (org + owner user)
-Status: READY (execution BLOCKED by env). Priority P0. Type: backend.
-Objective: CF to provision org + users/{uid}=OWNER + mint role claim; no self-signup to a role.
-Source: `FINAL-BACKEND-CONTRACT.md` B-01; `FINAL-FIREBASE-SECURITY-MODEL.md`.
-Security: invite/allowlist token decision; rate-limited; owner identity is a parameter.
-Tests: CF emulator. Downstream: N-07 provisioning screen.
+### SW-305 RBAC client gating + org scoping + deep-link auth
+Title: Compose routes hide by role; org/ownership scoping; deep links re-validate target auth+org+ownership+existence → NotFound/Forbidden fallback. UI never authorization.
+Source: `NAVIGATION.md`, `SECURITY-RBAC.md`, `FINAL-RBAC` agreement. Tests: FT-RBAC/nav. Downstream: all screens.
 
-### IMPL-304 Firestore + Storage Security Rules + emulator
-Title: Author rules per FINAL-FIREBASE-SECURITY-MODEL + FINAL-QUERY-RULE-MATRIX + FINAL-RBAC
-Status: READY (execution BLOCKED by env). Priority P0. Type: security.
-Objective: Authoritative rules: owner+org scoping, deletedAt==null reads, deny client writes to server-authority/audit fields, subcollection inheritance, Storage owner/self-only, query rule-compatibility (rules are not filters). Emulator tests.
-Source: `FINAL-FIREBASE-SECURITY-MODEL.md`, `FINAL-QUERY-RULE-MATRIX.md`, `FINAL-RBAC-MATRIX.md`, `SERVER-AUTHORITY-MATRIX.md`.
-Security: every AT-* control encoded. Tests: FT-RULES/FT-SEC emulator.
-Acceptance: escalation/ownership/delete/immutable-field tests pass.
-Downstream: all writes.
+### SW-306 Firestore + Storage Security Rules + emulator tests
+Title: rules per role × operation × approval/status/expiry; org equality; deleted/soft; deny client writes to server-authority/audit; Storage owner/self + size/MIME/dimension; temp-assignment expiry via server time; query rule-compat (rules are not filters); index declarations.
+Source: `SECURITY-RBAC.md`, `BACKEND-OPERATIONS.md` (queries), `10-SANDWORKS` query compliance, `08-NATIVE-ANDROID/FINAL-QUERY-RULE-MATRIX.md` pattern. Tests: FT-RULES (escalation/ownership/forge/expiry/storage/timestamp). Downstream: all writes. Blockers: SW-BLK-1/2.
 
-### IMPL-305 Cloud Functions B-01..B-14
-Title: Implement CF ops with authz, txn, idempotency, audit
-Status: READY (execution BLOCKED by env). Priority P0. Type: backend.
-Objective: One CF per operation B-01..B-14 (create session/trip+number, attendance record/correct, close, soft-delete cascade, catalogue CRUD, settings, profile, account ops, backup/cloud, restore/rollback, export CSV, owner notifications). Each: actor/authz/input/validation/txn/idempotency(opId)/audit/errors.
-Source: `FINAL-BACKEND-CONTRACT.md`; `AUDIT-LOG-INTEGRITY.md`; `CONCURRENCY-SPECIFICATION.md`; `SERVER-AUTHORITY-MATRIX.md`.
-Security: CF validates role/org; never a thin relay; audit server-written; idempotent (CF retry-safe).
-Tests: CF emulator per op (validation/txn/idempotency/audit/notification). Acceptance: every B-op verified.
-Downstream: Phase 4/5/6 writes.
+### SW-307 Cloud Functions B-01..B-18
+Title: implement CF ops with authz, txn, idempotency, audit (create trip/number, approval, rate/rule, closure, leaderboard, assignment, alert, notifications, export, profile photo, account ops, etc.). Idempotency + CF-retry-safe.
+Source: `BACKEND-OPERATIONS.md` B-01..18; `CONCURRENCY-IDEMPOTENCY-AUDIT.md`. Tests: CF emulator per op. Blockers: SW-BLK-1/2. Downstream: phases 4-8 writes.
 
-### IMPL-306 Server-authority + audit integration
-Title: Enforce SERVER-AUTHORITY-MATRIX; server-generated audit end-to-end
-Status: READY (execution BLOCKED by env). Priority P0. Type: security.
-Objective: Confirm all server-authoritative fields enforced; audit events generated by CF for each privileged op; rules deny client audit writes.
-Source: `SERVER-AUTHORITY-MATRIX.md`, `AUDIT-LOG-INTEGRITY.md`.
-Security: forge rejection test. Tests: FT-AUD.
-Acceptance: audit truthful; client cannot write/delete auditLogs.
+### SW-308 Server-authority + audit integration
+Title: enforce SERVER-AUTHORITY (role/approval/status/org/timestamps/audit/money/rate/number/closure); server-generated audit; rules deny client audit writes.
+Source: `CONCURRENCY-IDEMPOTENCY-AUDIT.md`, `SECURITY-RBAC.md`, `DATA-MODEL.md`. Tests: FT-AUD (forge reject). Downstream: all.
 
-### IMPL-307 RBAC/org scoping client + deep-link auth + security tests
-Title: Client role gating + org scoping + deep-link re-auth; full FT-SEC
-Status: READY (execution BLOCKED by env). Priority P0. Type: security.
-Objective: Owner-only UI gating; deep links re-validate existence+ownership (NotFound/Forbidden fallback); run AT-1..20 test suite.
-Source: `FINAL-RBAC-MATRIX.md`, `FINAL-NAVIGATION.md` (deep links), `SECURITY-ATTACK-REVIEW.md`.
-Tests: FT-RBAC/FT-SEC. Acceptance: UI == rules == backend (FINAL-RBAC agreement).
+### SW-309 Security attack test coverage (AT)
+Title: run emulator security suite covering the attack matrix (role escalation, labourer write, cross-org, forge role/approval/money/number/closure/audit/timestamp, deep-link authz, storage, disabled/expired, idempotency).
+Source: `SECURITY-RBAC.md`, `10-SANDWORKS` threat notes, `08-NATIVE-ANDROID/SECURITY-ATTACK-REVIEW.md`. Tests: FT-SEC. Downstream: release.

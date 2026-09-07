@@ -1,28 +1,29 @@
-# IMPLEMENTATION ROADMAP
+# SAND WORKS — Implementation Roadmap
 
-Ordered, dependency-aware task roadmap. **Execution is BLOCKED until the authoritative gate is READY** (see README + DECISION-REGISTER). Statuses: BLOCKED / READY / IN PROGRESS / COMPLETE / DEFERRED / CANCELLED.
+Status: **RECONCILED to `docs/10-SANDWORKS/` (locked scope).** Supersedes the retired S-V1 single-owner roadmap. Planning only.
 
-Full per-task contracts: `tasks/PHASE-*.tasks.md`; contract fields: `tasks/TASK-CONTRACT-TEMPLATE.md`.
+## North star (final directives, locked)
+Roles **OWNER/DRIVER/LABOURER (no admin)** · package **`com.roshan.sandworks`** · brand **SAND WORKS** · **START FRESH** (no legacy migration) · private distribution (no Google Play public release) · money = accrued-totals only (never "payment") · default rate ₹200 · equal-split default distribution · daily summary 19:30 IST configurable · WhatsApp share (driver) · owner-only export/report · approval-before-access · temp-assignment expiry enforced · tractor registry (init Sonalika/John Deere).
 
-## Task inventory (52 tasks, computed from the task files)
-| Phase | Task IDs | Count | Nature |
+## Delivery model
+- **Not public release.** Delivery target = private production APK to owner; build requires owner-supplied Firebase project + signing + (Blaze decision) — see `PHASE-GATES.md` and `10-SANDWORKS/BLOCKERS.md`.
+- Nine implementation phases P1..P9 map onto **Gates Gate-0..Gate-9** (Gate-0 = frozen spec, executed once; Gate-n = phase-n exit).
+
+## Phase → Gate → Exit criteria
+| Phase | IDs | Exit gate | Exit criterion (summary) |
 |---|---|---|---|
-| 1 Foundations | IMPL-101..110 | 10 | skeleton, deps, config, DI, logging/errors, nav foundation, design system, domain model, business-rule use cases, local schema |
-| 2 Data & offline | IMPL-201..204 | 4 | DAO/migrations/queries, repositories, outbox+WorkManager+idempotency, rev+conflict |
-| 3 Auth & security | IMPL-301..307 | 7 | Firebase bootstrap, auth, provisioning, rules+emulator, CF B-01..14, server-authority+audit, RBAC/deep-link/AT |
-| 4 Owner core workflow | IMPL-401..408 | 8 | auth screens, shell, dashboard, session/day/close, trip/numbering, attendance, delete/undo, history/search |
-| 5 Catalogues+reporting/backup | IMPL-501..507 | 7 | labourers, drivers, vehicles(S2), analytics, CSV(S1), backup/restore, cloud(S1 opt) |
-| 6 Account/secondary | IMPL-601..606 | 6 | profile, account/security, settings, notif(S4), help(S3), audit viewer(S5) |
-| 7 Cross-cutting | IMPL-701..705 | 5 | a11y, responsive, performance, assets, localization |
-| 8 Verification & release | IMPL-801..805 | 5 | full test suite, security sign-off, perf run, release gate, close-out |
-| **Total** | | **52** | |
+| P1 Foundations & identity | SW-101..108 | Gate-1 | Project `com.roshan.sandworks`, DI/nav/design-system/theme/error handlers in place; spec traceable |
+| P2 Data & offline | SW-201..204 | Gate-2 | Room/outbox/repos; deterministic replay; idempotency + conflict primitives proven |
+| P3 Auth, security, RBAC, rules, CF, audit | SW-301..309 | Gate-3 | Real Firebase wired; approvals, RBAC, Firestore/Storage rules + CF ops B-01..B-18 + audit working under rules; attack suite green |
+| P4 Money engine & scheduling | SW-401..404 | Gate-4 | Rate snapshot, distribution, daily closure (idempotent), leaderboards correct; Blaze/fallback decided |
+| P5 OWNER surfaces | SW-501..509 | Gate-5 | All owner screens fulfil sub-checklist (states/a11y/responsive/tests) |
+| P6 DRIVER surfaces | SW-601..605 | Gate-6 | All driver screens fulfil sub-checklist |
+| P7 LABOURER surfaces | SW-701..704 | Gate-7 | All labourer read-only screens fulfil sub-checklist |
+| P8 Notifications & alerts | SW-801..803 | Gate-8 | FCM + centre A–F + owner alert comply with NOTIFICATION-ALERT-SPEC |
+| P9 Quality & release | SW-901..906 | Gate-9 | Test matrix, security retest, assets, release readiness, handover |
 
-## Recommended execution order (critical path first)
-Phase 1 → Phase 2 → Phase 3 (needs env) → Phase 4 → Phase 5 → Phase 6 → Phase 7 → Phase 8.
-Within each phase: ascending task ID; respect DEPENDENCY-MATRIX hard links (e.g., IMPL-405→406; IMPL-406 needs IMPL-204 conflict + IMPL-304/305 rules/CF; IMPL-302→303→401; IMPL-305→ all write screens).
+## Spec-derived architecture spine (final, per `docs/10-SANDWORKS` + non-conflicting `docs/08-NATIVE-ANDROID`)
+Kotlin + Jetpack Compose, offline-first → Firebase (Auth/Firestore/Storage/Functions/FCM/App Check), server-authoritative privileged ops via Cloud Functions, deterministic idempotent outbox, revision-based concurrency, Material 3 + locked SAND WORKS brand, per-role Compose surfaces with own/org scoping.
 
-## Gate linkage
-Phase COMPLETE only when its gate (PHASE-GATES.md) passes. A phase is not complete merely because it compiles. OPTIONAL (S1..S5) tasks may be DEFERRED only by explicit approval, not silently (PRODUCT-FREEZE governance).
-
-## Blocked status
-Currently the whole programme is BLOCKED at Phase 0 gate. Within it, IMPL-101/103/301/304/305 and IMPL-704 and Phase-8 have hard `BLOCKED — CREDENTIAL/ENVIRONMENT`/`— BUSINESS DECISION`/`— MISSING ASSET` blockers that are recorded, not disguised.
+## Reference assets (immutable)
+PNG logo/icon are **locked and immutable** (no SVG/regeneration/redraw). The canonical master set is under owner confirmation (SW-BLK-A1/A2). See `10-SANDWORKS/ASSET-INVENTORY.md`.

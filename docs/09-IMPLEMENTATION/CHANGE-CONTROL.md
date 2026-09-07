@@ -1,40 +1,18 @@
-# CHANGE CONTROL
+# SAND WORKS — Change Control Log
 
-Once implementation begins (post Gate-0), the roadmap and frozen scope become CONTROLLED. This defines how change is handled without silently altering requirements (AGENT §14).
+Status: **RECONCILED to `docs/10-SANDWORKS/PRODUCT-FREEZE.md` + `DIRECTIVE-REGISTER.md`.** Planning-only control plane.
 
-## What is frozen/controlled
-- PRODUCT-FREEZE scope (MUST/SHOULD; OUT/DEFERRED boundaries).
-- FINAL specification set under `08-NATIVE-ANDROID/`.
-- This control system (tasks, gates, dependencies, traceability).
-- AGENT.md §14 (immutable; changes per §14.29).
-- DEPENDENCY-POLICY.
+## Supersession entry (the single most important change in this plane)
+- **CC-R1 (this package):** The former **S-V1 single-owner 52-task** plan (`docs/09-IMPLEMENTATION`, IMPL-xxx ids) is **superseded and no longer authoritative**. Replaced by the **SAND WORKS reconciled 52-task plan** (SW-101..SW-906, 9 phases) that executes the locked `docs/10-SANDWORKS/` scope (OWNER/DRIVER/LABOURER, money engine, daily closure, leaderboards, temp-labour expiry, notifications, export, offline/sync, Firebase). Old phase task files deleted; old decision rows retired.
 
-## Change types
-- New requirement / scope change / requirement reinterpretation / architectural deviation / dependency change / business-rule change.
+## Change-control policy
+- Scope changes are made only by the owner against `docs/10-SANDWORKS/PRODUCT-FREEZE.md`; this plane reflects, never originates, scope.
+- No PNG artwork regeneration/SVG redraws (immutable brand). No fabricated infra.
+- Any change to a task contract is logged below with the affected task + status.
 
-## Mandatory change flow (no shortcuts)
-```
-NEW REQUIREMENT / CHANGE PROPOSAL
-→ Impact analysis (product/scope/security/architecture/data/UX/offline/test)
-→ Traceability update (TRACEABILITY-MATRIX + FINAL-TRACEABILITY)
-→ Dependency update (DEPENDENCY-MATRIX)
-→ Security review (SECURITY-ATTACK-REVIEW relevance; no new attack surface unexamined)
-→ Test impact (FINAL-TEST-CONTRACT)
-→ Task creation/modification (a task must never hide multiple unrelated changes)
-→ APPROVAL (explicit user/owner sign-off; change is authorised and documented)
-→ Implementation
-```
-
-## Rules
-- An autonomous agent MUST NOT self-authorize a change that alters approved product behaviour, scope, security, or the Definition of Done.
-- A "needed to get the build passing"/"temporary"/"replace later" rationale is never authorization (AGENT §14.29).
-- Deferred/Out-of-scope items cannot be pulled in without approval; Required items cannot be silently dropped.
-- Every approved change updates: this file (a change log row), affected task statuses, TRACEABILITY, RISK-REGISTER, and PROGRESS-TRACKER counts.
-
-## Change log
-| ID | Date | Change | Rationale | Approved by | Docs/tasks updated | Status |
-|---|---|---|---|---|---|---|
-| (none yet — implementation not started) | | | | | | |
-
-## Ambiguity rule
-If a requirement is ambiguous and impacts a critical path, raise it as a change/blocker (BLOCKED — DESIGN SPECIFICATION) rather than guessing.
+## Log
+| ID | Date | Change | Source | Tasks affected | Status |
+|---|---|---|---|---|---|
+| CC-R1 | 2026-09-07 | Reconcile 09 implementation plane to 10-SANDWORKS; retire S-V1 | SAND WORKS directive / READINESS-AUDIT R-1 finding | all (SW-101..906) | APPLIED (this package) |
+| CC-DOC | 2026-09-07 | Rewrite 09 meta-docs (roadmap/master-plan/gates/dependency/trace/risk/decision/change/progress/completion/audit/rules/task-mgmt) to SW-xxx | R-1 instruction | 09/*.md | APPLIED |
+| CC-TASKFILES | 2026-09-07 | Delete 8 stale S-V1 `PHASE-*.tasks.md`; author Phase-1..9 SW contracts (52 tasks) | R-1 instruction | tasks/*.tasks.md | APPLIED |

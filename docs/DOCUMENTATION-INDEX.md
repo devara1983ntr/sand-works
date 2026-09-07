@@ -3,6 +3,10 @@
 ## Purpose
 Master index of the documentation suite produced for the Principal Forensic Audit of the existing Flutter reference application and the native Android rebuild specification.
 
+## SUPERSEDING AUTHORITY — SAND WORKS (read first)
+> The rebuild is now governed by the **locked SAND WORKS directive**, not the earlier general audit/spec. Authority order: `10-SANDWORKS/DIRECTIVE-REGISTER.md` + `PRODUCT-FREEZE.md` → `10-SANDWORKS/*` → `03-ENGINEERING/AGENT.md` §14 → `08-NATIVE-ANDROID/` (non-conflicting continuity) → Flutter `lib/` (reference only). Package `com.roshan.sandworks`, brand SAND WORKS, roles OWNER/DRIVER/LABOURER (no admin), START FRESH.
+> **Control plane:** `10-SANDWORKS/` = frozen spec (24 docs). `09-IMPLEMENTATION/` = reconciled execution plan (52 SW tasks, 9 phases) that **supersedes the retired S-V1 plan**. R-1 reconciliation audit complete (2026-09-07) → see `09-IMPLEMENTATION/IMPLEMENTATION-CONTROL-AUDIT.md`. Planning plane is READY by scope; go-live gated by SW-BLK-1..6, A1/A2 (not disguised). Do not follow stale/single-owner S-V1 content.
+
 ## Audit metadata
 - Repository: https://github.com/Manash07Bhoi/LABOUR-PARTY-2.git
 - Commit audited: `2dd2fe4ed85e9f0e2a420e3a383fed1e75b8a21b`
@@ -186,22 +190,22 @@ Master index of the documentation suite produced for the Principal Forensic Audi
 | `08-NATIVE-ANDROID/FINAL-READINESS-REPORT.md` | hostile review + readiness + §44 report |
 
 ### Phase 0.8 — Implementation control system (`docs/09-IMPLEMENTATION/`)
-Execution-control layer between the specification and the coding agent (planning only; no code).
-| `09-IMPLEMENTATION/README.md` | purpose, source-of-truth, readiness (BLOCKED) |
-| `09-IMPLEMENTATION/IMPLEMENTATION-MASTER-PLAN.md` | programme objectives, phase model, scope |
-| `09-IMPLEMENTATION/IMPLEMENTATION-ROADMAP.md` | ordered roadmap + task inventory (52 tasks) |
-| `09-IMPLEMENTATION/IMPLEMENTATION-RULES.md` | binding execution rules (no-code-until-READY) |
-| `09-IMPLEMENTATION/PHASE-GATES.md` | Gate-0..Gate-8 completion gates |
-| `09-IMPLEMENTATION/TASK-MANAGEMENT.md` | task statuses, small-step model, blocker protocol |
-| `09-IMPLEMENTATION/TRACEABILITY-MATRIX.md` | feature/requirement → task mapping |
-| `09-IMPLEMENTATION/DEPENDENCY-MATRIX.md` | hard/soft deps, critical path, parallel groups |
-| `09-IMPLEMENTATION/RISK-REGISTER.md` | programme risks |
-| `09-IMPLEMENTATION/DECISION-REGISTER.md` | Gate-0 blockers BLK-01..07 + non-blocking |
-| `09-IMPLEMENTATION/CHANGE-CONTROL.md` | controlled-change process |
-| `09-IMPLEMENTATION/PROGRESS-TRACKER.md` | live task-state counters |
-| `09-IMPLEMENTATION/COMPLETION-REGISTER.md` | evidence-based completions |
-| `09-IMPLEMENTATION/IMPLEMENTATION-CONTROL-AUDIT.md` | §27/§28 quality audit + final output |
-| `09-IMPLEMENTATION/tasks/` | task template + `PHASE-1..8` full task contracts |
+Execution-control layer between the specification and the coding agent (planning only; no code). **R-1 reconciled to SAND WORKS (SW-xxx, 9 phases, 52 tasks); the retired S-V1 single-owner plan is superseded.**
+| `09-IMPLEMENTATION/README.md` | reconciled source-of-truth, authority order, task grid (52) |
+| `09-IMPLEMENTATION/IMPLEMENTATION-MASTER-PLAN.md` | objectives, phase model, critical path, parallel lanes |
+| `09-IMPLEMENTATION/IMPLEMENTATION-ROADMAP.md` | ordered roadmap + phase→gate map |
+| `09-IMPLEMENTATION/IMPLEMENTATION-RULES.md` | binding execution rules (no fabrication; blocker protocol) |
+| `09-IMPLEMENTATION/PHASE-GATES.md` | Gate-0..Gate-9 completion gates (env-gated marked) |
+| `09-IMPLEMENTATION/TASK-MANAGEMENT.md` | SW-xxx lifecycle, statuses, blocker protocol |
+| `09-IMPLEMENTATION/TRACEABILITY-MATRIX.md` | SWF↔screen↔task↔phase↔gate (bidirectional) |
+| `09-IMPLEMENTATION/DEPENDENCY-MATRIX.md` | dependency spine, parallel groups, env deps |
+| `09-IMPLEMENTATION/RISK-REGISTER.md` | spec + environment risks |
+| `09-IMPLEMENTATION/DECISION-REGISTER.md` | resolved decisions + SW-BLK-1..6/A1/A2 |
+| `09-IMPLEMENTATION/CHANGE-CONTROL.md` | supersession (CC-R1) + change log |
+| `09-IMPLEMENTATION/PROGRESS-TRACKER.md` | emulator-first task-state (52 NOT-STARTED, 0 BLOCKED-at-authoring, 0 DONE; DONE deps per task) |
+| `09-IMPLEMENTATION/COMPLETION-REGISTER.md` | evidence-based completions (control-plane only) |
+| `09-IMPLEMENTATION/IMPLEMENTATION-CONTROL-AUDIT.md` | R-1 14-point audit + reconciliation verdict |
+| `09-IMPLEMENTATION/tasks/` | template + `PHASE-1..9` SW task contracts (52) |
 
 ### Phase 0.9 — SAND WORKS locked product direction (`docs/10-SANDWORKS/`)
 Authoritative product re-freeze (private family app; 3 roles; money/rates/leaderboards/export; START FRESH; package `com.roshan.sandworks`; brand assets locked). Supersedes conflicting earlier single-owner S-V1 scope.

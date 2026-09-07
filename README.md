@@ -1,76 +1,103 @@
-<div align="center">
+# ⚠️ LEGACY REFERENCE README — NOT the SAND WORKS implementation specification
 
-# 🏗️ Sand Works — Labour & Tractor-Trip Management
-
-**Offline-first field operations · Multi-role architecture · Production-grade engineering blueprint**
-
-The complete, audit-grade repository for **Sand Works**, a labour-contractor / transport-operator platform that digitises a working day of **Work → Trips → Labour attendance** (sand, soil & stone haulage by tractor). It ships as a working offline-first **Flutter reference app** plus the full **native Android** rebuild specification — architecture, security, database, backend and a 52-task implementation-control system — so a separate engineering team can build it without guessing.
-
-[![Kotlin](https://img.shields.io/badge/Kotlin-Compose%2FM3-7F52FF?logo=kotlin&logoColor=white)](#) [![Architecture](https://img.shields.io/badge/Status-Specification%20%2B%20Control%20Plan-blueviolet)](#) [![Firebase](https://img.shields.io/badge/Firebase-Auth%20%2F%20Firestore%20%2F%20Functions%20%2F%20FCM-FFCA28?logo=firebase)](#) [![License](https://img.shields.io/badge/License-All%20Rights%20Reserved-inactive)](#)
-
-</div>
-
----
-
-## ✨ What this repository is
-
-| Layer | Contents |
-|---|---|
-| **Reference App** | Existing offline-first **Flutter** implementation (the behavioural source of truth under `lib/`). |
-| **Forensic Audit** | Full product/UX/engineering/security/performance audit of the reference app (`docs/01`–`docs/07`). |
-| **Native Blueprint** | Kotlin + Jetpack Compose + Material 3 architecture, ADRs, RBAC, Firebase design (`docs/08-NATIVE-ANDROID`). |
-| **Final Design Closure** | Product freeze, feature/screen catalogs, business rules, state machines, schema, security model — decisions resolved or explicitly blocked (`08-NATIVE-ANDROID/FINAL-*`). |
-| **Implementation Control** | Dependency-aware, gate-controlled, 52-task execution plan (`docs/09-IMPLEMENTATION`). |
+> **DO NOT treat this file or the Flutter code it describes as the product to build.**
+>
+> This `README.md` documents the **legacy single-user Flutter "Labour Party" app**, which the SAND WORKS rebuild treats as a **behavioural reference only** (`lib/`). It is **not** the SAND WORKS specification and its content below (e.g. "operates entirely locally without remote APIs", single-user, Hive, `.labourbackup`) does **not** apply to the target build.
+>
+> **Authoritative specification — read these instead:**
+> - Frozen SAND WORKS spec: `docs/10-SANDWORKS/` (start `docs/10-SANDWORKS/README.md`). Roles OWNER/DRIVER/LABOURER; money engine, daily closure, leaderboards, temp-labour expiry, notifications, export, offline+Firebase sync, package `com.roshan.sandworks`, brand **SAND WORKS**, START FRESH.
+> - Execution control plane: `docs/09-IMPLEMENTATION/` (52 SW tasks, 9 phases) → `docs/09-IMPLEMENTATION/README.md`.
+> - Binding rules: `docs/03-ENGINEERING/AGENT.md` §14.
+> - Legacy reference material (kept, not authoritative): `docs/`, `docs/08-NATIVE-ANDROID/` (architectural continuity only, non-conflicting).
+>
+> **Sections 1–12 below are preserved legacy reference content about the Flutter app. They are intentionally NOT updated to SAND WORKS and must not be cited as SAND WORKS requirements.**
 
 ---
 
-## 🎯 Core domain
+# LEGACY — "Labour Party" Flutter Reference App README
 
-- **Work Session** — one day's operation, scoped by date + Morning/Evening session.
-- **Trips** — sequential tractor trips with driver & vehicle, auto-numbered per day.
-- **Labour & Attendance** — per-trip present/absent with an **append-immutable, audited correction trail**.
-- **History, Analytics & Search** — grouped history, KPIs and a sortable data table.
-- **Backup / Restore** — portable, encrypted & signed `.labourbackup` files.
+# 1. Project Overview
+- **Name:** Labour Party (legacy Flutter reference app)
+- **Type:** Offline-first Android application
+- **Purpose:** Labour trip management and tracking.
+- **Scope Boundaries:** Operates entirely locally without remote APIs, cloud backend, or internet dependencies.
+
+# 2. Key Capabilities
+- **Work management:** Organize and group specific jobs.
+- **Trip tracking:** Record individual trips, drivers, and tractors.
+- **Labour tracking:** Associate labour participation explicitly per trip.
+- **History:** Browse structured historical records chronologically.
+- **Analytics:** View computed performance and operational metrics.
+- **Backup/Restore:** Export and import local datasets.
+- **Draft autosave:** Capture form changes real-time preventing data loss during edits.
+- **Offline operation:** 100% offline local-only operation out of the box.
+
+# 3. Architecture
+- **Clean Architecture:** Strict separation between Presentation, Domain, and Data layers.
+- **BLoC:** Manages state transitions explicitly.
+- **Hive:** Handles NoSQL rapid document storage.
+- **Repository Pattern:** Abstracts local database interactions from business rules.
+- **Local-only persistence:** Data lives uniquely on the device within Android Sandboxing.
+
+# 4. Application Flow
+- Dashboard
+- Add/Edit (Work forms)
+- Confirm Next Trip (Sequential trip continuation)
+- Trip Details (In-depth metadata)
+- History (Archive viewing)
+- Analytics (KPI computations)
+- Settings (Backup mechanics)
+
+# 5. Data Model Overview
+- **Work:** Top-level identifier grouping trips.
+- **Trip:** Core execution event (Time, Notes, Driver, Tractor).
+- **Labour:** Persistent global entities available for selection.
+- **TripLabour:** Relationship mapping a specific Labour entity to a Trip.
+- **Draft:** Transient storage for autosaved active edits.
+
+# 6. Backup & Restore
+- **Format:** Operates via exported `.labourbackup` files.
+- **SAF Flow:** Leverages Android Storage Access Framework (Scoped Storage) to avoid broad file permissions.
+- **Restore limits:** Constrained to < 25MB to prevent memory isolates from overflowing during restore parsing.
+- **Migration expectations:** Users migrating between mismatched APK signatures must export `.labourbackup`, reinstall, and restore.
+
+# 7. Release Status
+- Release Candidate Approved
+- Production Certification Deferred
+
+# 8. Production Readiness Summary
+The repository has undergone a strict, multi-phase audit evaluating the frontend logic bounds, database integrity constraints, and offline security scope. Please reference the [Production Readiness Report](docs/production_readiness/PRODUCTION_READINESS_REPORT.md) for detailed deliverables.
+
+# 9. Development
+- **Setup:** `flutter pub get`
+- **Analyze:** `flutter analyze`
+- **Test:** `flutter test`
+- **Build:** `flutter build apk --release` (Requires `android/key.properties` configuration)
+
+# 10. Maintenance Policy
+**Allowed:**
+- Bug fixes
+- Security patches
+- Database migration logic
+- QA implementations
+
+# 11. Application Screenshots
+A full gallery of application screenshots is available in the [Screenshots Gallery](docs/screenshots/README.md).
+
+| Dashboard | History | Analytics |
+| :---: | :---: | :---: |
+| ![Dashboard](docs/screenshots/dashboard.png) | ![History](docs/screenshots/history.png) | ![Analytics](docs/screenshots/analytics.png) |
 
 ---
 
-## 🏛️ Native architecture highlights
+## 12. Audit Documentation (forensic audit suite)
 
-- **Clean Architecture** — Presentation (Compose UDF) → Domain ← Data, Hilt DI, single-activity Navigation Compose.
-- **Offline-first & honest** — Room cache + deterministic outbox + WorkManager sync. **No fake success**: a queued write is never shown as saved.
-- **Server-authoritative security** — role, org, timestamps, audit, numbering & status are enforced in **Firestore/Storage Security Rules + Cloud Functions**, never trusted from the client.
-- **Integrity-first** — optimistic concurrency (`rev`), idempotency keys, Firestore transactions, CF-generated audit logs.
-- **Quality gates** — accessibility, responsive (M3 adaptive), performance & release contracts, plus a strict **Zero-Placeholder / Zero-Fabrication** engineering policy.
+A Principal Forensic Audit & native-Android specification suite is provided under `docs/` (added 2026-09-07 on the `audit/documentation` branch, **no application source was modified**).
 
-> 📖 Start reading at **`docs/README_INDEX.md`** and **`docs/00-AUDIT-INDEX.md`**. The binding coding rules live in **`docs/03-ENGINEERING/AGENT.md`**.
+- Start at [`docs/00-AUDIT-INDEX.md`](docs/00-AUDIT-INDEX.md) — executive audit conclusion.
+- Full index: [`docs/DOCUMENTATION-INDEX.md`](docs/DOCUMENTATION-INDEX.md).
+- Consolidated report PDF: [`docs/AUDIT-REPORT.pdf`](docs/AUDIT-REPORT.pdf).
 
----
+**Status note:** This documentation records the existing Flutter reference product. The native Android (Kotlin/Compose/Firebase) rebuild is **specified only — it has not been implemented.** See `docs/08-NATIVE-ANDROID/IMPLEMENTATION-ROADMAP.md`.
 
-## 🗂️ Documentation map
-
-```
-docs/
-├── 01-PRODUCT            product requirements, rules, personas, PRDs
-├── 02-UX-UI              screens, interaction, gestures, design system
-├── 03-ENGINEERING        architecture, codebase map, AGENT.md (coding rules)
-├── 04-SECURITY           threat model, RBAC, secrets audit, authn/authz
-├── 05-PERFORMANCE        performance analysis
-├── 06-QUALITY            testing, defects, error states, pre-release
-├── 07-OPERATIONS         CI/CD, deployment, observability, backup
-├── 08-NATIVE-ANDROID     native blueprint + FINAL design-closure set + ADRs
-├── 09-IMPLEMENTATION     implementation control system (planning)
-└── AUDIT-REPORT*.pdf      consolidated audit reports
-```
-
----
-
-## 🚦 Implementation status
-
-> **Planning / Specification — not yet implemented.** The native rebuild is gated behind explicit product & environment decisions recorded in `docs/09-IMPLEMENTATION/DECISION-REGISTER.md`. The control system is the execution plan, **not** permission to code.
-
-<!-- footer -->
-<div align="center">
-
-Built with an obsessive commitment to **truthfulness over appearance** — every screen must really work, every value must be real, every blocked step must be reported, never faked.
-
-</div>
+**SAND WORKS supersession (2026-09-07):** the rebuild is governed by the locked **SAND WORKS** spec — `docs/10-SANDWORKS/` (authoritative, roles OWNER/DRIVER/LABOURER, package `com.roshan.sandworks`) executed via `docs/09-IMPLEMENTATION/` (52 SW tasks). This Flutter app and `docs/08-NATIVE-ANDROID/` are **reference/continuity material only**; where they conflict with `10-SANDWORKS`, `10-SANDWORKS` wins. Do not treat this legacy README as a SAND WORKS requirement source.

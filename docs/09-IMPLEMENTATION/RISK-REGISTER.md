@@ -1,23 +1,34 @@
-# RISK REGISTER
+# SAND WORKS — Risk Register
 
-Programme risks with likelihood/impact/mitigation/owner. Reassess at every gate. Cross-references: `SECURITY-ATTACK-REVIEW.md` (AT-*), `08-NATIVE-ANDROID/PRODUCT-GAP-REGISTER.md` (G-*).
+Status: **RECONCILED to `10-SANDWORKS`.** Supersedes retired S-V1 register. Planning-only control plane.
 
-| ID | Risk | L | I | Mitigation | Owner |
-|---|---|---|---|---|---|
-| RK-01 | Scope not confirmed → build wrong V1 | H | H | Gate-0 BLOCKED until S-V1 + D-1/2/6 owner sign-off; PRODUCT-FREEZE binding | Product |
-| RK-02 | D-4 identity unresolved blocks scaffold/release | H | H | Resolve before IMPL-101/804; throwaway id in private branch only, never ship | Product |
-| RK-03 | No Firebase env/credentials/keys → Phase 3 & core blocked | H | H | Surface env blocker up front (not a task); provisioning runbook; no fake backend (AGENT §14.4) | DevOps |
-| RK-04 | D-3 legacy migration wrongly assumed | M | M | BLOCKED until decision; no silent migration | Product |
-| RK-05 | Dependency versions drift / undocumented deps | M | M | DEP policy re-verify on Flutter-independent machine; only approved deps (R3) | Eng |
-| RK-06 | Rules/CF delivered late stalls core (on critical path) | M | H | Build rules/CF early (Phase 3); env ready in parallel | Security/DevOps |
-| RK-07 | Offline no-fake-success regression (false "synced") | M | H | OFFLINE contract + outbox tests (FT-OFFLINE); UI-state review | Eng/QA |
-| RK-08 | Concurrency (rev/idempotency) incomplete → dup/lost writes | M | H | CONCURRENCY-SPEC tests; CF idempotency; conflict UI | Eng |
-| RK-09 | Attendance history silently overwritten | M | H | ATTENDANCE-INTEGRITY append model + FT-AUD | Eng |
-| RK-10 | Client-trusted role/status escalation | L | H | SERVER-AUTHORITY + rules; FT-SEC (AT-1..20) | Security |
-| RK-11 | Fabrication/placeholder/dummy leaks in (scope/quality) | M | H | AGENT §14 + pre-commit semantic scan + hostile review (IMPL-802) | All |
-| RK-12 | SEC-1 keystore not remediated before release | M | H | IMPL-804 remediation + secret scan; AGENT §7 | Security |
-| RK-13 | Perf targets unmet (queries/aggregation) | M | M | indexes/CF counters; FINAL-PERFORMANCE measure (IMPL-703/803) | Eng |
-| RK-14 | Missing brand/logo asset → blocked a11y/UI polish | M | M | IMPL-704 BLOCKED — MISSING ASSET; report; don't invent | Product/Design |
-| RK-15 | Test contract not fully executed / gates weakened | M | H | Phase-8 IMPL-801; no disabled gates (AGENT §14.19) | QA |
+## Spec / execution risks (code can mitigate)
+| ID | Risk | Likelihood | Impact | Mitigation / owner of mitigation |
+|---|---|---|---|---|
+| R-1 | Stale 09 plan misleads an agent (the readiness-audit gap) | — (occurred) | High | **This R-1 reconciliation** — 09 superseded banner + SW-xxx inventory + traceability |
+| R-2 | Fabrication of Firebase/FCM/Storage/CF/signing infra | Med | Critical | AGENT §14; blockers not disguised; build to boundary only |
+| R-3 | Fake success / silent failure in offline flow | Med | High | SW-201..204; explicit pending + conflict; idempotency (SW-203) |
+| R-4 | Double earnings on closure re-run | Med | Critical | SW-403 exactly-once per (org,date); CF idempotent; FT-closure |
+| R-5 | Money integer/rounding drift | Med | High | SW-108/402 integer paise policy + tests |
+| R-6 | Cross-org / role-escalation / forge (approval, rate, number, audit, timestamp) | Med | Critical | SW-306/307/308/309; Security Rules + server-authority + attack tests |
+| R-7 | Owner-notification shows another user's money (broadcast) | Low-Med | High | SW-802 per-user targeting; no private-financial cross-broadcast |
+| R-8 | Labourer regains write after temp-expiry | Low | High | SW-306 expiry via server time; SW-307(B-11/12) |
+| R-9 | Leaderboard fabricated ranks / stale | Med | Med | SW-404 real-data-only; deterministic tie; reset boundaries |
+| R-10 | Deep-link authz bypass | Med | High | SW-305 re-validate target; FT-RBAC/nav |
+| R-11 | Offline changes lost after process death | Low-Med | Med | SW-203 durable outbox; FT process-death (SW-903) |
+| R-12 | Permission over-request (notifications) / full-volume-alert claim | Med | Med | SW-801 rationale flow; SW-803 honest limits |
+| R-13 | Accessibility/responsive regression | Med | Med | SW-902 audit gate |
 
-Legend: L/I = Low/Med/High. Residual risks accepted only with documented owner decision and monitoring.
+## Environment / go-live risks (owner-input required)
+| ID | Risk | Blocks | Smallest input |
+|---|---|---|---|
+| ENV-1 | No real Firebase project/config | SW-301..309, release (SW-BLK-1) | owner creates project + config |
+| ENV-2 | Blaze not decided → Storage/CF/scheduling ambiguous | SWF-24/25/26, cloud paths (SW-BLK-2) | owner decision |
+| ENV-3 | No signing keystore | release/private APK (SW-BLK-3) | owner keystore |
+| ENV-4 | No FCM creds | notifications/alerts (SW-BLK-4) | provided with project |
+| ENV-5 | UX/wireframes unapproved | P5-7 final polish (SW-BLK-6) | owner approval |
+| ENV-6 | Alert/notification copy unapproved | final strings (SW-BLK-5) | owner/approved copy |
+| ENV-7 | Canonical asset ambiguity (1536 vs 1254/1024) | asset finalisation (SW-BLK-A1/A2) | owner confirmation — do not guess |
+
+## Accepted / residual
+Without env inputs, non-cloud foundations (P1/P2 and UI shells/screens that read local data) remain buildable; cloud-backed, money-authority, notification, and release areas are BLOCKED until their blockers clear. This split is intentional and reported (spec vs go-live).

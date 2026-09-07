@@ -2,6 +2,8 @@
 
 Purpose: single executive roll-up of the forensic audit. Every claim is classified. Commit `2dd2fe4`. Audit date 2026-09-07.
 
+> **SUPERSEDING EXECUTIVE NOTE — SAND WORKS (R-1).** The rebuild is governed by the locked SAND WORKS directive: `10-SANDWORKS/` (24 docs) is the frozen spec; `09-IMPLEMENTATION/` is the reconciled execution plane (52 SW-xxx tasks, 9 phases) that supersedes the retired S-V1 single-owner plan. A fresh **R-1 14-point reconciliation audit** completed 2026-09-07 — see `09-IMPLEMENTATION/IMPLEMENTATION-CONTROL-AUDIT.md`. **Verdict:** specification is READY for an independent Kotlin+Jetpack Compose agent to build the spec-allowed areas **without guessing or following stale S-V1 content**; NOT-READY for go-live/cloud-backed build until owner clears SW-BLK-1..6 and A1/A2 (Firebase project+config, Blaze, signing, FCM, approved copy, wireframes, canonical assets). Nothing fabricated; spec blockers kept separate from environment/go-live blockers. The 09/10 content below reflects this reconciliation.
+
 ## 1. Repository snapshot
 | Field | Value |
 |---|---|

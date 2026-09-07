@@ -1,43 +1,42 @@
-# DEPENDENCY MATRIX & CRITICAL PATH
+# SAND WORKS — Dependency Matrix (task graph)
 
-Hard dependencies (H): downstream must not start until upstream COMPLETE. Soft (S): should be complete but not strictly blocking. This matrix is authoritative for task ordering.
+Status: **RECONCILED to `docs/10-SANDWORKS/`.** Supersedes retired S-V1 graph. Planning only.
 
-## Phase dependency graph
+Legend: `→` = prerequisite (must complete first). `‖` = independent/parallelisable. Blockers in bold are external to code and gate the row.
+
+## Cross-phase dependency spine
 ```
-Gate-0 (READY)
+Gate-0 (frozen spec)
    │
-   ▼
-Phase 1 (IMPL-101..110)  ──► Phase 2 (201..204)  ──► Phase 3 (301..307)  ──► Phase 4 (401..408)
-                                                                              │
-                                             ┌───────────┬───────────────────┼──────────────┐
-                                             ▼           ▼                   ▼              ▼
-                                       Phase 5 (501..507)  Phase 6 (601..606)   Phase 7 (701..705)
-                                             └───────────┬───────────────────┴──────────────┘
-                                                         ▼
-                                                  Phase 8 (801..805)  ──► RELEASE
+P1 Foundations ──► P2 Data & offline ──► P3 Auth/Security/Rules/CF ──► P4 Money ──► [P5 OWNER ‖ P6 DRIVER ‖ P7 LABOURER] ──► P8 Notifications ──► P9 Quality/Release
 ```
-Phase 3 requires REAL Firebase env (hard env prerequisite). Phase 4 consumes Phase 2 (local/offline) and Phase 3 (rules/CF/audit).
 
-## Key hard links (examples)
-- IMPL-101 → IMPL-104,105,106,107 (foundation before use)
-- IMPL-110/201 (schema) → IMPL-202 repositories → IMPL-203/204
-- IMPL-302 auth → IMPL-303 provisioning → IMPL-401 auth screens
-- IMPL-304 rules + IMPL-305 CF → every write screen (405/406/407/501…)
-- IMPL-204 conflict → IMPL-406 attendance conflict + 405 number race
-- IMPL-108/109 domain → Phase 2 repositories → Phase 4
-- IMPL-304/305 (rules/CF B-*) → IMPL-406 (attendance CF), IMPL-506 (backup), IMPL-604 (notif B-14)
+## Per-phase dependencies
+**P1 (SW-101..108):** none in-plane (all depend on Gate-0). SW-101 (project) → SW-102..104 (DI/nav/DS/theme) → SW-105/106 (error/session/conflict) → SW-107/108 (money domain + a11y baseline), many ‖.
 
-## Critical path (drives release)
-Gate-0 → IMPL-101 → 104 → 106 → 108 → 109 → (Phase 2) 110/201 → 202 → 203/204 → (Phase 3) 301 env → 302 → 304/305 → 307 → (Phase 4) 401 → 402 → 403 → 404 → 405 → 406 → 407 → 408 → (Phase 5) 501 → 504 → 506 → (Phase 8) 801 → 802 → 803 → 804 → 805.
-NOTE: Phase 3's rules/CF (304/305) sit ON the critical path before core write screens (405/406). A delayed env blocks 304/305 and hence the whole core — an unflagged schedule risk if env is late (see RISK-REGISTER).
+**P2 (SW-201..204):** ← P1. Chain: SW-201 (schema/outbox) → SW-202 (repos) → SW-203 (outbox+sync) ‖ SW-204 (concurrency).
 
-## Parallel groups (safe if contracts fixed)
-| Group | Tasks | Shared contract | Conflict risk | Integration point |
-|---|---|---|---|---|
-| Design system/theme | IMPL-107 || IMPL-106 nav | IMPL-105 logger | none | integrated in Phase 4 screens |
-| Domain model + R-rule use cases | IMPL-108,109 | domain contract | low | consumed by repositories |
-| DAO/schema + repositories | IMPL-201,202 | Room schema | shared schema must be frozen | sync engine IMPL-203 |
-| Analytics data + backup data | IMPL-504 read-side, IMPL-506 | counters/backups contract | both touch CF B-05/11 | IMPL-305 |
-| Optional screens | IMPL-503,505,604,605,606 | their own screens | isolated | integrated per feature |
+**P3 (SW-301..309):** ← P2. Chain: SW-301 (Firebase bootstrap, **SW-BLK-1/2**) → SW-302 (auth) → SW-303/304 (provision/approval) → SW-305 (RBAC client) → SW-306 (rules) → SW-307 (CF B-01..18) → SW-308 (server-authority/audit) → SW-309 (attack tests). Rules (306) and CF (307) mutually inform; audit (308) consumes both.
 
-Never parallelize tasks that mutate the same architectural contract without coordination (e.g., do not run IMPL-405/406 against an unfrozen rules/CF contract).
+**P4 (SW-401..404):** ← P2+P3. Chain: SW-401 (rate) → SW-402 (distribution) → SW-403 (closure, **SW-BLK-2 Blaze vs fallback**) → SW-404 (leaderboards). Money domain prebuilt in SW-108.
+
+**P5 OWNER (SW-501..509):** ← P1..P4. Shell 501 → dashboards 502; 503 (approvals, needs CF/Gate-3), 504 (users/tractors), 505 (attendance), 506 (rates/rules settings, SW-401/402), 507 (settings), 508 (reports/export, **Blaze for cloud/storage**), 509 (audit viewer). Most ‖ after 501.
+
+**P6 DRIVER (SW-601..605):** ← P1..P4. 601 shell → 602 dash → 603 add/edit trip (**CF numbering, Gate-3**; concurrency) → 604 share ‖ 605 profile(+Storage if Blaze).
+
+**P7 LABOURER (SW-701..704):** ← P1..P4. 701 shell → 702 metrics → 703 history/leaderboard → 704 profile/notifications(needs P8 infra partially).
+
+**P8 (SW-801..803):** ← P3 (CF), P4 (closure→earnings notification), P5-7 centres. 801 FCM (**SW-BLK-4**) → 802 centre/types A–F → 803 owner alert (needs SW-BLK-5 copy).
+
+**P9 (SW-901..906):** ← everything. 901 test matrix → 902 a11y → 903 device/perf (**SW-BLK-6**) → 904 signing/release (**SW-BLK-3, 1**) → 905 security retest → 906 release/handover (**SW-BLK-5, A1/A2**).
+
+## External / environment dependency register (not disguised as tasks)
+| Blocker | Gates/phases it blocks | Category |
+|---|---|---|
+| SW-BLK-1 Firebase project+config | Gate-3, SW-301..309, release | CREDENTIAL/ENVIRONMENT |
+| SW-BLK-2 Blaze vs Spark | SWF-24/25/26, cloud export/closure, SW-306/307/403/508/605/704/904 | BUSINESS DECISION |
+| SW-BLK-3 signing keystore | release/private APK SW-904 | SECURITY/ENV |
+| SW-BLK-4 FCM creds | Gate-8 SW-801..803, SWF-15/16 | CREDENTIAL/ENVIRONMENT |
+| SW-BLK-5 notification/alert copy | SW-803 strings, Gate-8/9 | DESIGN/UX (approval) |
+| SW-BLK-6 wireframes/UX lock | P5-7 final polish, SW-903 | DESIGN SPEC |
+| SW-BLK-A1/A2 canonical assets | asset finalisation SW-906 | MISSING ASSET (confirm) |

@@ -1,36 +1,32 @@
-# IMPLEMENTATION MASTER PLAN
+# SAND WORKS — Implementation Master Plan
 
-Status: PLANNING. Programme-level view. The plan converts the frozen/approved specification into a dependency-aware implementation programme. Implementation is currently BLOCKED (see `DECISION-REGISTER.md`).
+Status: **RECONCILED to `docs/10-SANDWORKS/` (locked scope).** Supersedes retired S-V1 plan. Planning only.
 
-## 1. Programme objective
-Deliver the V1 **OWNER** native Android app (scope S-V1) exactly as specified, with real, truthful, secure, tested implementation, and **nothing** fabricated, placeholder, silently omitted, or outside approved scope. Every task is traceable to the authoritative spec; no agent makes product/architecture decisions.
+## Plan statement
+Deliver a private, offline-first, role-based (OWNER/DRIVER/LABOURER) Android app **SAND WORKS** (`com.roshan.sandworks`) per the locked `10-SANDWORKS` spec. No public store release. Execution is gated by owner/env blockers SW-BLK-1..6, A1/A2; nothing here is disguised as a task.
 
-## 2. Governing documents
-- Binding rules: `docs/03-ENGINEERING/AGENT.md` (esp. §14 Zero-Placeholder / §14.29 immutability), `08-NATIVE-ANDROID/IMPLEMENTATION-CONTRACT.md`.
-- Scope: `08-NATIVE-ANDROID/PRODUCT-FREEZE.md`.
-- Final decisions/blockers: `08-NATIVE-ANDROID/FINAL-DECISION-REGISTER.md`, and this dir's `DECISION-REGISTER.md`.
+## Work breakdown (52 tasks across 9 phases)
+Refer to `README.md` grid and `tasks/PHASE-*.tasks.md` for the authoritative full contract per task (each carries Objective/Why/Source/Security/Offline/Conflict/Blockers/Tests/Acceptance/Status/Downstream). Summary of ownership class per task:
 
-## 3. Phase model (derived from the actual dependency graph, not predetermined)
-| Phase | Name | Purpose | Depends on | Exit gate |
-|---|---|---|---|---|
-| 0 | Readiness gate | Confirm scope S-V1, D-3/D-4, env/credentials | — | Gate-0: IMPLEMENTATION STATUS READY |
-| 1 | Foundations | Gradle/variants/DI/nav/theme/logging/domain/local | Gate-0 (identity D-4) | Gate-1 |
-| 2 | Data & offline layer | Room/outbox/repositories/sync/conflict/concurrency | 1 | Gate-2 |
-| 3 | Auth & security foundation | Firebase Auth, App Check, Rules, CF (B-01..14), audit, org scoping | 1,2 | Gate-3 (needs real Firebase env) |
-| 4 | Owner core workflow | Dashboard/session/trip/attendance/delete/history | 2,3 | Gate-4 |
-| 5 | Catalogues + reporting/backup | N-29/30/31, N-27/28 analytics+export, N-38 backup/cloud | 4 | Gate-5 |
-| 6 | Account/settings/secondary | N-40/39/37 profile+security+settings; N-41/42/36 optional (S4/S3/S5) | 4 | Gate-6 |
-| 7 | Cross-cutting completion | Accessibility, responsive, performance, assets, localization | all | Gate-7 |
-| 8 | Verification & release | Full test contract, security/rules, emulator, perf, release gate | all | Gate-8 (release) |
+- **Data/domain/offline/UI/tests:** SW-101..108, SW-201..204, SW-401..404, SW-501..509, SW-601..605, SW-701..704, and quality SW-901..903 — buildable to READY once Gate-0 clears; they do NOT depend on Firebase creds at authoring time (but their acceptance of cloud-backed features does at runtime).
+- **Backend/security/CF (real Firebase required):** SW-301..309, SW-801..803, and export/photo/release deps (SW-508, SW-605/SW-704 photos, SW-904) — **BLOCKED** until SW-BLK-1 (project+config), SW-BLK-2 (Blaze), SW-BLK-4 (FCM). These must NOT be faked; implement only what credentials permit, else STOP and report (AGENT §14.23).
+- **Owner decision gating:** copy wording (SW-BLK-5), UX/wireframes (SW-BLK-6), Blaze plan (SW-BLK-2), canonical assets (SW-BLK-A1/A2), signing (SW-BLK-3).
 
-Parallelisation and critical path are in `DEPENDENCY-MATRIX.md`.
+## Critical path (dependency spine)
+Gate-0 → P1(F1) → P2(F2) → P3(F3; **needs SW-BLK-1**) → P4(F4) → P5(F5 OWNER) ‖ P6(F6 DRIVER) ‖ P7(F7 LABOURER) → P8(F8; **needs SW-BLK-4**) → P9(F9; **needs SW-BLK-3/5/6**).
+P5/P6/P7 are mutually parallelizable once P1–P4 land; all surface layers consume P2 repositories and P3 scoping/security.
 
-## 4. Scope boundaries (hard)
-IN (V1 S-V1): the 24 V1 features (FV-1..FV-70 V1 set) across 25 screens + 14 backend ops + 27 business rules + 20 attack controls + 17 test suites.
-NOT IN (do not implement): DEFERRED FV-80..86 (driver/labourer self-service D-1, ADMIN D-2, driver workflow D-6, cross-role notif, payroll, legacy import D-3) and OUT OF SCOPE FV-90 (web/desktop/biometric-PII/ML/ad).
+## Workstreams (recommended lanes)
+1. **Front-end foundation lane:** P1+P2 → enables all UI authoring off Firebase.
+2. **Backend/security lane:** P3 (+SW-301 real project) → unblocks writes, CF, approvals.
+3. **Money lane:** P4 on top of P2/P3.
+4. **Surface lanes:** P5/P6/P7 (parallel), then P8 notifications, then P9 quality/release.
+Single "owner" assumption is retired — each task names OWNER / DRIVER / LABOURER surfaces; backend tasks are role-agnostic infra.
 
-## 5. Execution philosophy
-Small, independently verifiable tasks; strict dependency order; no task started until prerequisites complete; no phase COMPLETE until its gate passes (code compiling is not completion); evidence-based tracking; no fabrication under any circumstance (AGENT §14).
+## Inter-task data/flow
+Writes (trips, rates, rules, labourer, approvals, assignments, corrections) flow client→outbox→(Rules)→Cloud Functions (server-authoritative: numbering, approval, rate/rule snapshot, closure, leaderboard, assignment expiry, alert, notifications, export, profile photo) → Firestore/Storage; all writes emit audit; all reads are server-rules-scoped; offline reads are local-first. Daily closure + notifications + cloud export are Blaze-dependent with documented Spark fallbacks (never fake).
 
-## 6. Acceptance definition
-The programme is complete when every READY-scope task is COMPLETE with evidence, every phase gate passes, IMPLEMENTATION CONTROL final audit is clean, and the release gate (`08-NATIVE-ANDROID/FINAL-TEST-CONTRACT.md`, `docs/06-QUALITY/PRE-RELEASE.md`) passes on a clean machine.
+## Execution policy
+- Build nothing requiring an unresolved blocker; author/execute to the boundary of what is specified.
+- Every completed task flips its `Status` to `DONE` in `tasks/PHASE-*.tasks.md` and is recorded in `PROGRESS-TRACKER.md` → `COMPLETION-REGISTER.md`.
+- Phase exit only via its Gate (`PHASE-GATES.md`).
