@@ -228,6 +228,7 @@ Authoritative product re-freeze (private family app; 3 roles; money/rates/leader
 | `10-SANDWORKS/WORKFLOW-STATE-MACHINES.md` | user/trip/closure/assignment/alert machines |
 | `10-SANDWORKS/CONCURRENCY-IDEMPOTENCY-AUDIT.md` | idempotency/concurrency/audit |
 | `10-SANDWORKS/FORMS-VALIDATION.md` | form + cross-field + server validation |
+| `10-SANDWORKS/READINESS-AUDIT.md` | evidence-based build-readiness audit + verdict |
 | `10-SANDWORKS/IMPLEMENTATION-CONTROL.md` | mapping + reconciliation to `09-IMPLEMENTATION` |
 
 Brand assets extracted to repo root: `sand_works_brand_assets/` (masters 1536×1536, logo sizes, Android mipmaps, play icons). Also at root: `SAND_WORKS_brand_assets_locked.zip`, `sand_works_app_icon_master.png`, `sand_works_logo_master.png`. Repository: `github.com/devara1983ntr/sand-works` (private).
