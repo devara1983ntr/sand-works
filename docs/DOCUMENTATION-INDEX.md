@@ -220,7 +220,17 @@ Authoritative product re-freeze (private family app; 3 roles; money/rates/leader
 | `10-SANDWORKS/OFFLINE-SYNC-SPEC.md` | offline/idempotency/conflict |
 | `10-SANDWORKS/UX-DESIGN-SYSTEM.md` | industrial design language |
 | `10-SANDWORKS/TEST-AND-QUALITY-SPEC.md` | test matrix + quality bar |
+| `10-SANDWORKS/ASSET-INVENTORY.md` | locked brand asset register (extracted zip) |
+| `10-SANDWORKS/BLOCKERS.md` | **separate blocker register** (go-live gate) |
+| `10-SANDWORKS/NAVIGATION.md` | role-scoped navigation + Back + deep links |
+| `10-SANDWORKS/SCREEN-STATE-CONTRACT.md` | state/error/loading/empty/offline contract |
+| `10-SANDWORKS/BACKEND-OPERATIONS.md` | CF ops B-01..18 + rule-compliant queries |
+| `10-SANDWORKS/WORKFLOW-STATE-MACHINES.md` | user/trip/closure/assignment/alert machines |
+| `10-SANDWORKS/CONCURRENCY-IDEMPOTENCY-AUDIT.md` | idempotency/concurrency/audit |
+| `10-SANDWORKS/FORMS-VALIDATION.md` | form + cross-field + server validation |
 | `10-SANDWORKS/IMPLEMENTATION-CONTROL.md` | mapping + reconciliation to `09-IMPLEMENTATION` |
+
+Brand assets extracted to repo root: `sand_works_brand_assets/` (masters 1536×1536, logo sizes, Android mipmaps, play icons). Also at root: `SAND_WORKS_brand_assets_locked.zip`, `sand_works_app_icon_master.png`, `sand_works_logo_master.png`. Repository: `github.com/devara1983ntr/sand-works` (private).
 
 ## Consolidated PDF
 `docs/AUDIT-REPORT.pdf` — generated from the completed documentation.
