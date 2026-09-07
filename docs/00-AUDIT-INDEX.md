@@ -110,6 +110,10 @@ Planning-only execution-control layer created at `docs/09-IMPLEMENTATION/` (no c
 
 **Readiness: BLOCKED** at Gate-0 (scope S-V1 + D-1/D-2/D-6 + D-3 + D-4 unresolved; real Firebase/Android environment + credentials + signing keys not present). This directory is the execution plan, not permission to code. Full §27/§28 report: `09-IMPLEMENTATION/IMPLEMENTATION-CONTROL-AUDIT.md`.
 
+# Phase 0.9 — SAND WORKS Locked Product Direction (addendum)
+
+A new authoritative product package was created at `docs/10-SANDWORKS/` reflecting a **locked product re-freeze** (private family app "SAND WORKS", owner Ramesh Sahu, package `com.roshan.sandworks`, three authenticated roles OWNER/DRIVER/LABOURER with no admin, START FRESH / no legacy migration, and money/rate/earnings/daily-closure/leaderboard/alert/export scope added). It supersedes earlier single-owner S-V1 scope where conflicting. It resolves D-1..D-8 and adds SW-1..SW-17; execution blockers SW-BLK-1..4 (Firebase env, Blaze-vs-Spark, dedicated signing) are recorded, never disguised. Brand masters (`sand_works_app_icon_master.png`, `sand_works_logo_master.png`, `SAND_WORKS_brand_assets_locked.zip`) were uploaded to GitHub `devara1983ntr/sand-works` (private). Planning only — no code/Firebase resources created.
+
 # Final Audit Report
 
 ## Repository

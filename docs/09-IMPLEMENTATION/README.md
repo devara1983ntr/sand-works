@@ -1,6 +1,8 @@
 # docs/09-IMPLEMENTATION — Implementation Control System
 
-Status: **PLANNING ONLY.** No application code is created here. This directory is the execution-control layer between the authoritative specification (`docs/08-NATIVE-ANDROID/`) and the future coding agent. Actual coding may begin ONLY when the authoritative gate reports **IMPLEMENTATION STATUS: READY**. It is currently **BLOCKED** (see §Readiness below and `DECISION-REGISTER.md`).
+> **⚠️ PRODUCT RE-FREEZE (SAND WORKS).** The controlling specification has moved to **`docs/10-SANDWORKS/`** (locked directive: 3 authenticated roles OWNER/DRIVER/LABOURER, no admin, package `com.roshan.sandworks`, money/rates/earnings/leaderboards/alerts/export in scope, START FRESH, brand assets locked). This directory remains the execution-control **mechanism** (phases, gates, tasks, registers), but its task inventory, decision register, traceability and per-phase contracts MUST be **reconciled** to the SAND WORKS scope before execution. Do not apply earlier S-V1 single-owner-only assumptions where they conflict. See `docs/10-SANDWORKS/IMPLEMENTATION-CONTROL.md`.
+
+Status: **PLANNING ONLY.** No application code is created here. This directory is the execution-control layer between the authoritative specification and the future coding agent. Actual coding may begin ONLY when the authoritative gate reports **IMPLEMENTATION STATUS: READY**. It is currently **BLOCKED** (see §Readiness below, `DECISION-REGISTER.md`, and `docs/10-SANDWORKS/DIRECTIVE-REGISTER.md`).
 
 ## Source-of-truth hierarchy (authoritative)
 1. Explicit user decisions (none yet that clear the gate)

@@ -203,6 +203,25 @@ Execution-control layer between the specification and the coding agent (planning
 | `09-IMPLEMENTATION/IMPLEMENTATION-CONTROL-AUDIT.md` | §27/§28 quality audit + final output |
 | `09-IMPLEMENTATION/tasks/` | task template + `PHASE-1..8` full task contracts |
 
+### Phase 0.9 — SAND WORKS locked product direction (`docs/10-SANDWORKS/`)
+Authoritative product re-freeze (private family app; 3 roles; money/rates/leaderboards/export; START FRESH; package `com.roshan.sandworks`; brand assets locked). Supersedes conflicting earlier single-owner S-V1 scope.
+| `10-SANDWORKS/README.md` | frame, assets, authority, readiness |
+| `10-SANDWORKS/DIRECTIVE-REGISTER.md` | resolves D-1..D-8 + SW-1..17; SW-BLK-1..4 |
+| `10-SANDWORKS/PRODUCT-FREEZE.md` | V1 MUST/SHOULD/OUT/DEFERRED |
+| `10-SANDWORKS/ROLE-AND-USER-MODEL.md` | OWNER/DRIVER/LABOURER, approval, temp assignment |
+| `10-SANDWORKS/FEATURE-CATALOG.md` | SWF-01..95 role-mapped, statused |
+| `10-SANDWORKS/SCREEN-CATALOG.md` | role dashboards + new screens |
+| `10-SANDWORKS/DATA-MODEL.md` | core entities/collections, immutability |
+| `10-SANDWORKS/MONEY-ENGINE-SPEC.md` | rates, distribution, closure idempotency, integer |
+| `10-SANDWORKS/SCHEDULING-SPEC.md` | 19:30 summary; Blaze/Spark honesty |
+| `10-SANDWORKS/SECURITY-RBAC.md` | backend-authoritative RBAC/scoping/audit |
+| `10-SANDWORKS/NOTIFICATION-ALERT-SPEC.md` | notif A–F + owner alert (Android limits) |
+| `10-SANDWORKS/EXPORT-REPORT-SPEC.md` | PDF/CSV owner-only export |
+| `10-SANDWORKS/OFFLINE-SYNC-SPEC.md` | offline/idempotency/conflict |
+| `10-SANDWORKS/UX-DESIGN-SYSTEM.md` | industrial design language |
+| `10-SANDWORKS/TEST-AND-QUALITY-SPEC.md` | test matrix + quality bar |
+| `10-SANDWORKS/IMPLEMENTATION-CONTROL.md` | mapping + reconciliation to `09-IMPLEMENTATION` |
+
 ## Consolidated PDF
 `docs/AUDIT-REPORT.pdf` — generated from the completed documentation.
 
